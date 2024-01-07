@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            margin: 5px;
+            padding: 20px;
+            font-size: 22px;
+        }
+
+        form {
+            margin-top: 20px;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input[type="text"], select, input[type="datetime-local"] {
+            max-width: 300px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Appointment system</h1>
+<h2>Create new appointment</h2>
+<button onclick="location.href='/appointments/create'">Create</button>
+<h2>List of appointments</h2>
+<button onclick="location.href='/appointments'">Click</button>
+</body>
+</html>

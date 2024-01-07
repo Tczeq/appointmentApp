@@ -1,0 +1,5 @@
+package pl.test.coding.common;
+
+public enum ReasonForVisit {
+    SKIN_DISORDER, JOINT_PAINT, BACK_PROBLEM, CHOLESTEROL_PROBLEM, ASTHMA, ANXIETY, HIGH_BLOOD_PRESSURE, MIGRAINE, DIABETE;
+}

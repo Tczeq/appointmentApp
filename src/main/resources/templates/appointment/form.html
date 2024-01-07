@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tworzenie studenta</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        form {
+            margin-top: 20px;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input[type="text"], select, input[type="datetime-local"] {
+            max-width: 300px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Create new appointment</h1>
+<button onclick="location.href='/appointments/create'">Reset</button>
+<button onclick="location.href='/appointments'">Return</button>
+<button onclick="window.location.href='/'" class="home-button">Home</button>
+
+<form method="post" action="/appointments/create">
+    <label><h3>Patient</h3></label>
+    <select id="patientSelectId" name="patientId" required>
+        <option value="" disabled selected>Select patient</option>
+        <option th:each="patient : ${patients}" th:text="${patient.name} + ' ' + ${patient.lastName}"
+                th:value="${patient.id}"></option>
+    </select>
+    </br>
+
+    <label><h3>Set appointment date</h3></label>
+    <input type="datetime-local" name="term" th:value="${appointment != null ? appointment.term : ''}" th:min="${today}"
+           required/>
+    <div id="errorContainer" style="display:none;">
+        <ul id="errorMessages">
+            <li th:each="error : ${errorMessages}" th:text="${error.defaultMessage}"></li>
+        </ul>
+    </div>
+
+    <label><h3>Appointment time in minutes</h3></label>
+    <select name="appointmentTime" required>
+        <option value="" disabled selected>Select appointment time</option>
+        <option value="10">10 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="30">30 minutes</option>
+        <option value="45">45 minutes</option>
+        <option value="60">60 minutes</option>
+    </select>
+
+    <label><h3>Reason for visit</h3></label>
+    <select id="reasonSelectId" name="reasonForVisit" required
+            onchange="updateDoctorsBasedOnReasonVisit(this.id, 'doctorSelectId')">
+        <option value="" disabled selected>Select reason</option>
+        <option th:each="reason : ${reasonForVisit}" th:text="${reason}" th:value="${reason}"/>
+    </select>
+
+    <label><h3>Doctor</h3></label>
+    <select id="doctorSelectId" name="doctorId" required>
+        <option value="" disabled selected>Select doctor</option>
+    </select>
+    </br>
+
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>
+<script>
+    function updateDoctorsBasedOnReasonVisit(reasonSelectorId, doctorSelectorId) {
+        let reasonSelect = document.getElementById(reasonSelectorId);
+        let doctorSelect = document.getElementById(doctorSelectorId);
+        let url = "/doctors?reason=" + reasonSelect.value;
+        $.getJSON(url, function (doctors) {
+            doctorSelect.innerHTML = '<option value="" disabled selected>Select doctor</option>';
+            doctors.forEach(doctor => {
+                let option = `<option value="${doctor.id}">${doctor.name} ${doctor.lastName}</option>`;
+                doctorSelect.innerHTML += option;
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        var errorContainer = $('#errorContainer');
+        if (errorContainer.length && errorContainer.find('li').length > 0) {
+            var errors = errorContainer.find('li').map(function () {
+                return $(this).text();
+            }).get();
+            alert(errors.join("\n"));
+        }
+    });
+</script>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .create-button {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<h1>APPOINTMENT LIST</h1>
+<button onclick="location.href='/appointments/create'" class="create-button">Create</button>
+<button onclick="location.href='/doctors'">Doctors</button>
+<button onclick="location.href='/patients'">Patients</button>
+<button onclick="location.href='/appointments'">Reset</button>
+<br><br>
+<form action="/appointments" method="get">
+    <label for="doctorLastName">Doctor Last Name:</label>
+    <select id="doctorLastName" name="doctorLastName">
+        <option value="" disabled selected>Select Doctor</option>
+        <option th:each="lastName : ${uniqueDoctorLastNames}"
+                th:text="${lastName}"
+                th:value="${lastName}">
+        </option>
+    </select>
+
+    <label for="patientLastName">Patient Last Name:</label>
+    <select id="patientLastName" name="patientLastName">
+        <option value="" disabled selected>Select Patient</option>
+        <option th:each="lastName : ${uniquePatientLastNames}"
+                th:text="${lastName}"
+                th:value="${lastName}">
+        </option>
+    </select>
+
+    <label for="appointmentTime">Appointment time:</label>
+    <select id="appointmentTime" name="appointmentTime">
+        <option value="" disabled selected>Select time</option>
+        <option value="10">10 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="30">30 minutes</option>
+        <option value="45">45 minutes</option>
+        <option value="60">60 minutes</option>
+    </select>
+    <label for="startDate">Start date:</label>
+    <input type="datetime-local" id="startDate" name="startDate" th:min="${today}">
+    <label for="endDate">End date:</label>
+    <input type="datetime-local" id="endDate" name="endDate" th:min="${today}">
+    <input type="submit" value="Search">
+    <br><br>
+</form>
+<table>
+    <thead>
+    <tr>
+        <th> ID</th>
+        <th> Reason</th>
+        <th>
+            Term
+            <br><br>
+            <form th:action="@{/appointments}" method="get">
+                <input type="hidden" name="doctorLastName" th:value="${param.doctorLastName}"/>
+                <input type="hidden" name="patientLastName" th:value="${param.patientLastName}"/>
+                <input type="hidden" name="appointmentTime" th:value="${param.appointmentTime}"/>
+                <input type="hidden" name="startDate" th:value="${param.startDate}"/>
+                <input type="hidden" name="endDate" th:value="${param.endDate}"/>
+                <button type="submit" name="sort" value="termDesc">Max</button>
+                <button type="submit" name="sort" value="termAsc">Min</button>
+            </form>
+
+        </th>
+        <th> Time
+            </br>
+            </br>
+            <form th:action="@{/appointments}" method="get">
+                <input type="hidden" name="doctorLastName" th:value="${param.doctorLastName}"/>
+                <input type="hidden" name="patientLastName" th:value="${param.patientLastName}"/>
+                <input type="hidden" name="appointmentTime" th:value="${param.appointmentTime}"/>
+                <input type="hidden" name="startDate" th:value="${param.startDate}"/>
+                <input type="hidden" name="endDate" th:value="${param.endDate}"/>
+                <button type="submit" name="sort" value="timeDesc">Max</button>
+                <button type="submit" name="sort" value="timeAsc">Min</button>
+            </form>
+        </th>
+        <th>
+            Doctor
+            </br>
+            </br>
+            <form th:action="@{/appointments}" method="get">
+                <input type="hidden" name="doctorLastName" th:value="${param.doctorLastName}"/>
+                <input type="hidden" name="patientLastName" th:value="${param.patientLastName}"/>
+                <input type="hidden" name="appointmentTime" th:value="${param.appointmentTime}"/>
+                <input type="hidden" name="startDate" th:value="${param.startDate}"/>
+                <input type="hidden" name="endDate" th:value="${param.endDate}"/>
+                <button type="submit" name="sort" value="doctorDesc">Sort Z-A</button>
+                <button type="submit" name="sort" value="doctorAsc">Sort A-Z</button>
+            </form>
+        </th>
+        <th> Patient
+            </br>
+            </br>
+            <form th:action="@{/appointments}" method="get">
+                <input type="hidden" name="doctorLastName" th:value="${param.doctorLastName}"/>
+                <input type="hidden" name="patientLastName" th:value="${param.patientLastName}"/>
+                <input type="hidden" name="appointmentTime" th:value="${param.appointmentTime}"/>
+                <input type="hidden" name="startDate" th:value="${param.startDate}"/>
+                <input type="hidden" name="endDate" th:value="${param.endDate}"/>
+                <button type="submit" name="sort" value="patientDesc">Sort Z-A</button>
+                <button type="submit" name="sort" value="patientAsc">Sort A-Z</button>
+            </form>
+        </th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="appointment : ${appointments}">
+        <td th:text="${appointment.id}"></td>
+        <td th:text="${appointment.reasonForVisit}"></td>
+        <td th:text="${appointment.formattedTerm}"></td>
+        <td th:text="${appointment.appointmentTime}"></td>
+        <td th:text="${appointment.doctorLastName}"></td>
+        <td th:text="${appointment.patientLastName}"></td>
+        <td>
+            <button th:value="${appointment.id}" onclick="deleteAppointment(this.value)">Delete</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
+<script type="text/javascript">
+    function deleteAppointment(appointmentId) {
+        let url = "/appointments?idToDelete=" + appointmentId;
+        $.ajax({
+            url: url,
+            method: 'DELETE',
+            success: function () {
+                document.location.reload()
+            },
+            error: function () {
+                alert("Something gone wrong!")
+            }
+
+        })
+    }
+</script>
