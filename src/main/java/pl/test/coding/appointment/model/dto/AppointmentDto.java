@@ -1,5 +1,7 @@
 package pl.test.coding.appointment.model.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +16,9 @@ import java.time.format.DateTimeFormatter;
 @Setter
 public class AppointmentDto {
 
+    @Positive
     private Integer id;
+    @FutureOrPresent
     private LocalDateTime term;
     private String formattedTerm;
     private ReasonForVisit reasonForVisit;
@@ -34,13 +38,11 @@ public class AppointmentDto {
                 .formattedTerm(appointment.getTerm().format(formatter))
                 .reasonForVisit(appointment.getReasonForVisit())
                 .appointmentTime(appointment.getAppointmentTime())
-                .doctorId(appointment.getDoctor() != null ? appointment.getDoctor().getId() : null)
-                .patientId(appointment.getPatient() != null ? appointment.getPatient().getId() : null)
-                .doctorLastName(appointment.getDoctor() != null ? appointment.getDoctor().getLastName() + " " + appointment.getDoctor().getName() : null)
-                .patientLastName(appointment.getPatient() != null ? appointment.getPatient().getLastName() + " " + appointment.getPatient().getName() : null)
+                .doctorId(appointment.getDoctor().getId())
+                .patientId(appointment.getPatient().getId())
+                .doctorLastName(appointment.getDoctor().getLastName() + " " + appointment.getDoctor().getName())
+                .patientLastName(appointment.getPatient().getLastName() + " " + appointment.getPatient().getName())
                 .isDeleted(appointment.getIsDeleted())
                 .build();
     }
-
-
 }

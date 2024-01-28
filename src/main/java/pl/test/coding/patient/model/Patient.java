@@ -17,7 +17,7 @@ public class Patient {
     private int id;
     @Pattern(regexp = "[A-Z][a-z]{1,50}", message = "The name must begin with a capital letter and contain from 1 to 50 letters.")
     private String name;
-    @Pattern(regexp = "[A-Z][a-z]{1,50}", message = "The lastname must begin with a capital letter and contain from 1 to 50 letters.")
+    @Pattern(regexp = "[óA-Z][a-z]{1,50}", message = "The lastname must begin with a capital letter and contain from 1 to 50 letters.")
     private String lastName;
     @Version
     private Integer version;

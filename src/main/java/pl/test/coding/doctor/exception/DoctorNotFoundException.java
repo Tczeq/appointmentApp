@@ -1,7 +1,9 @@
 package pl.test.coding.doctor.exception;
 
+import java.text.MessageFormat;
+
 public class DoctorNotFoundException extends RuntimeException {
     public DoctorNotFoundException(Integer doctorId) {
-        super("Doctor with ID: " + doctorId + " not found.");
+        super(MessageFormat.format("Doctor with id={0} not found", doctorId));
     }
 }

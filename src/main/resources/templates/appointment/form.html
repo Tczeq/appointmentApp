@@ -52,10 +52,9 @@
     <label><h3>Set appointment date</h3></label>
     <input type="datetime-local" name="term" th:value="${appointment != null ? appointment.term : ''}" th:min="${today}"
            required/>
-    <div id="errorContainer" style="display:none;">
-        <ul id="errorMessages">
-            <li th:each="error : ${errorMessages}" th:text="${error.defaultMessage}"></li>
-        </ul>
+
+    <div th:if="${error}">
+        <p style="color: red;" th:text="${error}"></p>
     </div>
 
     <label><h3>Appointment time in minutes</h3></label>
@@ -89,7 +88,7 @@
     function updateDoctorsBasedOnReasonVisit(reasonSelectorId, doctorSelectorId) {
         let reasonSelect = document.getElementById(reasonSelectorId);
         let doctorSelect = document.getElementById(doctorSelectorId);
-        let url = "/doctors?reason=" + reasonSelect.value;
+        let url = "/appointments?reason=" + reasonSelect.value;
         $.getJSON(url, function (doctors) {
             doctorSelect.innerHTML = '<option value="" disabled selected>Select doctor</option>';
             doctors.forEach(doctor => {
