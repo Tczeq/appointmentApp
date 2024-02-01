@@ -2,7 +2,6 @@ package pl.test.coding.doctor;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.test.coding.common.ReasonForVisit;
 import pl.test.coding.common.Specialization;
 import pl.test.coding.doctor.exception.SpecializationNotFoundException;
@@ -18,11 +17,6 @@ public class DoctorService {
 
     public List<Doctor> findAll() {
         return doctorRepository.findAll();
-    }
-
-    @Transactional
-    public void create(Doctor doctor) {
-        doctorRepository.save(doctor);
     }
 
     public List<String> findUniqueDoctorLastNames() {

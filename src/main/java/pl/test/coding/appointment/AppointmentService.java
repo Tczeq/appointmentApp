@@ -51,14 +51,13 @@ public class AppointmentService {
             throw InvalidDate.forPatient(appointmentDto.getTerm());
         }
 
-        Appointment appointment = new Appointment();
-
         Doctor doctor = doctorRepository.findWithLockingById(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new DoctorNotFoundException(appointmentDto.getDoctorId()));
 
         Patient patient = patientRepository.findWithLockingById(appointmentDto.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException(appointmentDto.getPatientId()));
 
+        Appointment appointment = new Appointment();
         appointment.setTerm(appointmentDto.getTerm());
         appointment.setReasonForVisit(appointmentDto.getReasonForVisit());
         appointment.setAppointmentTime(appointmentDto.getAppointmentTime());
@@ -69,8 +68,6 @@ public class AppointmentService {
     }
 
     public List<AppointmentDto> sortAndFind(AppointmentSortCriteria criteria) {
-
-
         List<AppointmentDto> appointmentsFromRepo = findAll();
 
         List<AppointmentDto> filteredAppointments = new ArrayList<>();
