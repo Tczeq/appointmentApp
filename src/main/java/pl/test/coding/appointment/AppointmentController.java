@@ -48,12 +48,7 @@ public class AppointmentController {
 
     @PostMapping("/create")
     public String create(AppointmentDto appointment, Model model) {
-        model.addAttribute("doctors", doctorService.findAll());
-        model.addAttribute("patients", patientService.findAll());
-        model.addAttribute("today", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        model.addAttribute("reasonForVisit", ReasonForVisit.values());
         model.addAttribute("appointment", appointment);
-
         appointmentService.create(appointment);
         return "redirect:/appointments";
     }
