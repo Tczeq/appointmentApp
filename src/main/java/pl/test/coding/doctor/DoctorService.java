@@ -38,8 +38,8 @@ public class DoctorService {
             case ANXIETY -> Specialization.PSYCHIATRY;
             case ASTHMA -> Specialization.PULMONOLOGY;
             case BACK_PROBLEM -> Specialization.CARDIOLOGY;
-            case CHOLESTEROL_PROBLEM -> Specialization.DERMATOLOGY;
-            case MIGRAINE, DIABETE -> Specialization.FAMILY_MEDICINE;
+            case SKIN_DISORDER, CHOLESTEROL_PROBLEM -> Specialization.DERMATOLOGY;
+            case MIGRAINE, DIABETE, JOINT_PAINT -> Specialization.FAMILY_MEDICINE;
             case HIGH_BLOOD_PRESSURE -> Specialization.HERMATOLOGY;
             default -> throw new SpecializationNotFoundException();
         };

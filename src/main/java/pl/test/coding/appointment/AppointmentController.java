@@ -38,18 +38,19 @@ public class AppointmentController {
     }
 
     @GetMapping("/create")
-    public String getCreateForm(AppointmentDto appointment, Model model) {
+    public String getCreateForm(Model model) {
         model.addAttribute("doctors", doctorService.findAll());
         model.addAttribute("patients", patientService.findAll());
         model.addAttribute("today", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         model.addAttribute("reasonForVisit", ReasonForVisit.values());
-        model.addAttribute("appointment", appointment);
+
         return "appointment/form";
     }
 
     @PostMapping("/create")
-    public String create(AppointmentDto appointment) {
+    public String create(AppointmentDto appointment, Model model) {
         appointmentService.create(appointment);
+        model.addAttribute("appointment", appointment);
         return "redirect:/appointments";
     }
 
