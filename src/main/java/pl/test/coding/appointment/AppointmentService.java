@@ -45,18 +45,19 @@ public class AppointmentService {
         if (appointmentDto.getTerm().isBefore(LocalDateTime.now())) {
             throw new DateFromPastException(appointmentDto.getTerm());
         }
-        if (appointmentRepository.existsByDoctorIdAndTermBetween(appointmentDto.getDoctorId(), appointmentDto.getTerm().minusHours(1), appointmentDto.getTerm().plusHours(1))) {
-            throw InvalidDate.forDoctor(appointmentDto.getTerm());
-        }
-        if (appointmentRepository.existsByPatientIdAndTermBetween(appointmentDto.getPatientId(), appointmentDto.getTerm().minusHours(1), appointmentDto.getTerm().plusHours(1))) {
-            throw InvalidDate.forPatient(appointmentDto.getTerm());
-        }
 
         Doctor doctor = doctorRepository.findWithLockingById(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new DoctorNotFoundException(appointmentDto.getDoctorId()));
 
         Patient patient = patientRepository.findWithLockingById(appointmentDto.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException(appointmentDto.getPatientId()));
+
+        if (appointmentRepository.existsByDoctorIdAndTermBetween(appointmentDto.getDoctorId(), appointmentDto.getTerm().minusHours(1), appointmentDto.getTerm().plusHours(1))) {
+            throw InvalidDate.forDoctor(appointmentDto.getTerm());
+        }
+        if (appointmentRepository.existsByPatientIdAndTermBetween(appointmentDto.getPatientId(), appointmentDto.getTerm().minusHours(1), appointmentDto.getTerm().plusHours(1))) {
+            throw InvalidDate.forPatient(appointmentDto.getTerm());
+        }
 
         Appointment appointment = new Appointment();
         CreateAppointmentMapper.createAppointment(appointment, appointmentDto, doctor, patient);
