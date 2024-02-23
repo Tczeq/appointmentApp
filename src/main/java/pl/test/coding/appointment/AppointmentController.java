@@ -31,7 +31,7 @@ public class AppointmentController {
 
     @GetMapping
     public String getAll(AppointmentSortCriteria appointmentSortCriteria, Model model) {
-        model.addAttribute("uniqueDoctorLastNames", doctorService.findUniqueDoctorLastNames());
+        model.addAttribute("uniqueDoctorLastNames", doctorService.findUniqueDoctorsLastNames());
         model.addAttribute("uniquePatientLastNames", patientService.findUniquePatientLastNames());
         model.addAttribute("appointments", appointmentService.sortAndFind(appointmentSortCriteria));
         return "appointment/list";

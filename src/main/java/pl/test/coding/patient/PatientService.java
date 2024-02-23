@@ -16,9 +16,6 @@ public class PatientService {
     }
 
     public List<String> findUniquePatientLastNames() {
-        return patientRepository.findAll().stream()
-                .map(Patient::getLastName)
-                .distinct()
-                .toList();
+        return patientRepository.findUniqueLastName();
     }
 }

@@ -3,8 +3,8 @@ package pl.test.coding.doctor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.test.coding.common.ReasonForVisit;
+import pl.test.coding.common.ReasonSpecializationMapper;
 import pl.test.coding.common.Specialization;
-import pl.test.coding.doctor.exception.SpecializationNotFoundException;
 import pl.test.coding.doctor.model.Doctor;
 import pl.test.coding.doctor.model.dto.DoctorDto;
 
@@ -14,34 +14,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    private final ReasonSpecializationMapper reasonSpecializationMapper;
+
 
     public List<Doctor> findAll() {
         return doctorRepository.findAll();
     }
 
-    public List<String> findUniqueDoctorLastNames() {
-        return doctorRepository.findAll().stream()
-                .map(Doctor::getLastName)
-                .distinct()
-                .toList();
+    public List<String> findUniqueDoctorsLastNames() {
+        return doctorRepository.findUniqueLastName();
     }
 
     public List<DoctorDto> findDoctorsByReason(ReasonForVisit reason) {
-        Specialization specialization = mapReasonToSpecialization(reason);
+        Specialization specialization = reasonSpecializationMapper.mapReasonToSpecialization(reason);
         return doctorRepository.findBySpecialization(specialization).stream()
                 .map(DoctorDto::fromEntity)
                 .toList();
-    }
-
-    private Specialization mapReasonToSpecialization(ReasonForVisit reason) {
-        return switch (reason) {
-            case ANXIETY -> Specialization.PSYCHIATRY;
-            case ASTHMA -> Specialization.PULMONOLOGY;
-            case BACK_PROBLEM -> Specialization.CARDIOLOGY;
-            case SKIN_DISORDER, CHOLESTEROL_PROBLEM -> Specialization.DERMATOLOGY;
-            case MIGRAINE, DIABETE, JOINT_PAINT -> Specialization.FAMILY_MEDICINE;
-            case HIGH_BLOOD_PRESSURE -> Specialization.HERMATOLOGY;
-            default -> throw new SpecializationNotFoundException();
-        };
     }
 }

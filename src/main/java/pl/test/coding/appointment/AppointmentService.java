@@ -27,6 +27,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final CreateAppointmentMapper createAppointmentMapper;
 
     @Transactional
     public void deleteById(int idToDelete) {
@@ -58,12 +59,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new PatientNotFoundException(appointmentDto.getPatientId()));
 
         Appointment appointment = new Appointment();
-        appointment.setTerm(appointmentDto.getTerm());
-        appointment.setReasonForVisit(appointmentDto.getReasonForVisit());
-        appointment.setAppointmentTime(appointmentDto.getAppointmentTime());
-        appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
-        appointment.setIsDeleted(false);
+        CreateAppointmentMapper.createAppointment(appointment, appointmentDto, doctor, patient);
         appointmentRepository.save(appointment);
     }
 

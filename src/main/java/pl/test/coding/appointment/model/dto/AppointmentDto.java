@@ -3,6 +3,7 @@ package pl.test.coding.appointment.model.dto;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import pl.test.coding.appointment.model.Appointment;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 @Builder
 @Getter
 @Setter
+@EqualsAndHashCode
 public class AppointmentDto {
 
     @Positive
